@@ -1,4 +1,5 @@
 from collections import defaultdict # because normal dicts dont support default key-value values
+import math
 
 class Ciphernator:
     CODE = ""
@@ -40,7 +41,7 @@ class Ciphernator:
     
     def solve_atbash(self):
         alphabet = "abcdefghijklmnopqrstuvwxyz"
-        reversed_alphabet = alphabet[::-1]
+        reversed_alphabet = alphabet[::-1] # reverse
 
         output = ""
         for letter in self.CODE:
@@ -50,6 +51,28 @@ class Ciphernator:
                 output += letter
         
         self.solved_code = output
+    
+    def solve_transposition_simple(self):
+        sorted_code = ""
+        sorted_score = 0
+
+        # try key as 2-9
+        # 0 cant work and 1 doesnt move anything
+        for key in range(2, 10):
+            row = len(self.CODE) // key
+            code = ""
+
+            for i in range(row):
+                for j in range(key):
+                    code += self.CODE[j * row + i]
+            
+
+            code_score = self.englishity(code)
+            if code_score > sorted_score:
+                sorted_code = code
+                sorted_score = code_score
+    
+        self.solved_code = sorted_code
     
     # rates how close the text is to "english"
     # uses bigram detection and chi squared formula
